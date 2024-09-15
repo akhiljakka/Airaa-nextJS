@@ -1,4 +1,4 @@
-import { Col, Flex } from 'antd'
+import React from 'react'
 
 type LayoutType = 'full-width' | 'narrow' | 'super-narrow'
 
@@ -8,32 +8,11 @@ interface Props {
   isCentered?: boolean
 }
 
-const getLayoutBreakpoints = (layout: LayoutType) => {
-  const mapping: Record<LayoutType, Record<string, { span: number }>> = {
-    'full-width': {
-      xs: { span: 24 },
-      sm: { span: 24 },
-      md: { span: 24 },
-      lg: { span: 24 },
-      xl: { span: 24 },
-      xxl: { span: 24 },
-    },
-    narrow: {
-      xs: { span: 24 },
-      sm: { span: 24 },
-      md: { span: 24 },
-      lg: { span: 16 },
-      xl: { span: 14 },
-      xxl: { span: 12 },
-    },
-    'super-narrow': {
-      xs: { span: 24 },
-      sm: { span: 24 },
-      md: { span: 24 },
-      lg: { span: 12 },
-      xl: { span: 10 },
-      xxl: { span: 8 },
-    },
+const getLayoutClasses = (layout: LayoutType): string => {
+  const mapping: Record<LayoutType, string> = {
+    'full-width': 'w-full',
+    narrow: 'w-full lg:w-2/3 xl:w-1/2',
+    'super-narrow': 'w-full lg:w-1/2 xl:w-1/3',
   }
 
   return mapping[layout] ?? mapping['full-width']
@@ -45,26 +24,19 @@ export const PageLayout: React.FC<Props> = ({
   isCentered = false,
   ...props
 }) => {
-  const breakpoints = getLayoutBreakpoints(layout)
+  const layoutClasses = getLayoutClasses(layout)
 
   return (
-    <>
-      <Flex style={{ width: '100%' }} justify="center">
-        <Col {...props} {...breakpoints} className="p-2">
-          {isCentered && (
-            <Flex
-              align="center"
-              justify="center"
-              vertical
-              flex={1}
-              style={{ minHeight: '100%' }}
-            >
-              {children}
-            </Flex>
-          )}
-          {!isCentered && children}
-        </Col>
-      </Flex>
-    </>
+    <div className="w-full flex justify-center">
+      <div className={`${layoutClasses} p-2`} {...props}>
+        {isCentered ? (
+          <div className="flex items-center justify-center min-h-full">
+            {children}
+          </div>
+        ) : (
+          children
+        )}
+      </div>
+    </div>
   )
 }

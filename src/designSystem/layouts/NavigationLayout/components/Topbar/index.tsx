@@ -1,12 +1,9 @@
 import { MenuOutlined } from '@ant-design/icons'
-import { Avatar, Flex, Layout, Menu, Tag } from 'antd'
 import { useParams, usePathname, useRouter } from 'next/navigation'
 import { ReactNode } from 'react'
 
 import { useUserContext } from '@/core/context'
 import { Utility } from '@/core/helpers/utility'
-
-const { Header } = Layout
 
 interface Props {
   isMobile?: boolean
@@ -35,72 +32,87 @@ export const Topbar: React.FC<Props> = ({
 
   const { user, checkRole } = useUserContext()
 
-  const style: any = {}
-
   const isThin = items.length === 0
-
-  if (isThin) {
-    style.height = '60px'
-  }
 
   if (isMobile) {
     return (
-      <>
-        <Header>
-          <Flex align="center" justify="space-between">
-            {header && <Flex>{header}</Flex>}
+      <header className="bg-white shadow-sm">
+        <div className="flex items-center justify-between px-4 py-2">
+          {header && <div>{header}</div>}
 
-            <Menu
-              mode="horizontal"
-              items={itemsMobile}
-              selectedKeys={[pathnamePure]}
-              style={{ width: 46 }}
-              overflowedIndicator={<MenuOutlined />}
-            />
-          </Flex>
-        </Header>
-      </>
+          <nav className="w-[46px]">
+            <ul className="flex">
+              {itemsMobile?.map(item => (
+                <li key={item.key}>
+                  <button
+                    onClick={item.onClick}
+                    className={`px-2 py-1 ${
+                      pathnamePure === item.key
+                        ? 'text-blue-600'
+                        : 'text-gray-600'
+                    }`}
+                  >
+                    {item.label}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </div>
+      </header>
     )
   }
 
   return (
-    <>
-      <Header style={style}>
-        <Flex align="center" style={style}>
-          {header && <Flex>{header}</Flex>}
+    <header className={`bg-white shadow-sm ${isThin ? 'h-[60px]' : ''}`}>
+      <div className={`flex items-center px-4 py-2 ${isThin ? 'h-full' : ''}`}>
+        {header && <div>{header}</div>}
 
-          <Flex vertical flex={1}>
-            <Menu
-              mode="horizontal"
-              items={items}
-              selectedKeys={[pathnamePure]}
-              overflowedIndicator={<MenuOutlined />}
-              style={{ flex: 1 }}
-            />
-          </Flex>
-
-          <Flex align="center" gap="middle">
-            {isLoggedIn && (
-              <>
-                {checkRole('admin') && (
-                  <Tag color="red" bordered={false}>
-                    Admin
-                  </Tag>
-                )}
-                <Avatar
-                  src={user?.pictureUrl}
-                  alt={user.name}
-                  size="default"
-                  onClick={() => router.push('/profile')}
-                  style={{ cursor: 'pointer' }}
+        <nav className="flex-1">
+          <ul className="flex">
+            {items?.map(item => (
+              <li key={item.key}>
+                <button
+                  onClick={item.onClick}
+                  className={`px-4 py-2 ${
+                    pathnamePure === item.key
+                      ? 'text-blue-600 border-b-2 border-blue-600'
+                      : 'text-gray-600'
+                  }`}
                 >
-                  {Utility.stringToInitials(user?.name)}
-                </Avatar>
-              </>
-            )}
-          </Flex>
-        </Flex>
-      </Header>
-    </>
+                  {item.label}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        <div className="flex items-center space-x-4">
+          {isLoggedIn && (
+            <>
+              {checkRole('admin') && (
+                <span className="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded">
+                  Admin
+                </span>
+              )}
+              <button
+                onClick={() => router.push('/profile')}
+                className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 cursor-pointer"
+              >
+                {user?.pictureUrl ? (
+                  <img
+                    src={user.pictureUrl}
+                    alt={user.name}
+                    className="w-full h-full rounded-full"
+                  />
+                ) : (
+                  Utility.stringToInitials(user?.name)
+                )}
+              </button>
+            </>
+          )}
+        </div>
+      </div>
+    </header>
   )
 }
