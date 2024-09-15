@@ -1,0 +1,14 @@
+
+ import "./product.zmodel"  
+
+model Category {
+
+    id                String        @id @default(uuid())  
+    name            String?          
+    description  String?          
+
+products    Product[]  @relation("category")  
+      dateCreated DateTime @default(now())
+      dateUpdated DateTime @updatedAt  @default(now())
+      @@allow("all", true)
+}

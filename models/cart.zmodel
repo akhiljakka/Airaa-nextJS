@@ -1,0 +1,15 @@
+
+ import "./user.zmodel"  
+ import "./cartItem.zmodel"  
+
+model Cart {
+
+    id                String        @id @default(uuid())  
+    userId        String?          
+    user            User?            @relation(fields: [userId], references: [id], name:"user")  
+
+cartItems  CartItem[]  @relation("cart")  
+      dateCreated DateTime @default(now())
+      dateUpdated DateTime @updatedAt  @default(now())
+      @@allow("all", true)
+}

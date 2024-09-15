@@ -1,0 +1,18 @@
+
+ import "./order.zmodel"  
+ import "./product.zmodel"  
+
+model OrderItem {
+
+    id                String        @id @default(uuid())  
+    quantity    Float?            
+    price          String?          
+    orderId      String?          
+    order          Order?          @relation(fields: [orderId], references: [id], name:"order")  
+    productId  String?          
+    product      Product?      @relation(fields: [productId], references: [id], name:"product")  
+
+dateCreated DateTime @default(now())
+      dateUpdated DateTime @updatedAt  @default(now())
+      @@allow("all", true)
+}

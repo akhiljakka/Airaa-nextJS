@@ -1,0 +1,14 @@
+
+
+model Coupon {
+
+    id                String        @id @default(uuid())  
+    code            String?          
+    discountPercentage  String?          
+    validFrom  String?          
+    validTo      String?          
+
+dateCreated DateTime @default(now())
+      dateUpdated DateTime @updatedAt  @default(now())
+      @@allow("all", true)
+}

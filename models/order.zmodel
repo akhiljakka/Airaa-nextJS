@@ -1,0 +1,17 @@
+
+ import "./user.zmodel"  
+ import "./orderItem.zmodel"  
+
+model Order {
+
+    id                String        @id @default(uuid())  
+    totalAmount  String?          
+    status        String?          
+    userId        String?          
+    user            User?            @relation(fields: [userId], references: [id], name:"user")  
+
+orderItems  OrderItem[]  @relation("order")  
+      dateCreated DateTime @default(now())
+      dateUpdated DateTime @updatedAt  @default(now())
+      @@allow("all", true)
+}

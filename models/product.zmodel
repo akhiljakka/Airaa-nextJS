@@ -1,0 +1,22 @@
+
+ import "./category.zmodel"  
+ import "./cartItem.zmodel"  
+ import "./orderItem.zmodel"  
+
+model Product {
+
+    id                String        @id @default(uuid())  
+    name            String?          
+    description  String?          
+    price          String?          
+    stock          Float?            
+    imageUrl    String?          
+    categoryId  String?          
+    category    Category?    @relation(fields: [categoryId], references: [id], name:"category")  
+
+cartItems  CartItem[]  @relation("product")  
+    orderItems  OrderItem[]  @relation("product")  
+      dateCreated DateTime @default(now())
+      dateUpdated DateTime @updatedAt  @default(now())
+      @@allow("all", true)
+}

@@ -1,0 +1,17 @@
+
+ import "./cart.zmodel"  
+ import "./product.zmodel"  
+
+model CartItem {
+
+    id                String        @id @default(uuid())  
+    quantity    Float?            
+    cartId        String?          
+    cart            Cart?            @relation(fields: [cartId], references: [id], name:"cart")  
+    productId  String?          
+    product      Product?      @relation(fields: [productId], references: [id], name:"product")  
+
+dateCreated DateTime @default(now())
+      dateUpdated DateTime @updatedAt  @default(now())
+      @@allow("all", true)
+}

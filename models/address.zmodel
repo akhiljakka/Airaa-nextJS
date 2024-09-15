@@ -1,0 +1,18 @@
+
+ import "./user.zmodel"  
+
+model Address {
+
+    id                String        @id @default(uuid())  
+    streetAddress  String?          
+    city            String?          
+    state          String?          
+    country      String?          
+    postalCode  String?          
+    userId        String?          
+    user            User?            @relation(fields: [userId], references: [id], name:"user")  
+
+dateCreated DateTime @default(now())
+      dateUpdated DateTime @updatedAt  @default(now())
+      @@allow("all", true)
+}
